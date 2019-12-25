@@ -15,7 +15,6 @@ def calculate_video_size(video_file_path):
     if matches:
         video_size = int(matches.group(1)) * 3600 + \
             int(matches.group(2)) * 60 + int(matches.group(3))
-        # print("Video size in seconds: {}".format(video_size))
         return video_size
     else:
         print("Can not determine video size.")
@@ -28,21 +27,20 @@ def chop_video(video_file_path, chunk_size):
 
     parsed_video_size = 0
     counter = 0
-    pth, ext = file_name.rsplit(".", 1)
+    raw_name, ext = file_name.rsplit(".", 1)
     while video_size - parsed_video_size:
-        cmd = "ffmpeg -i {} -vcodec copy -strict -2 -fs {} -ss {} {}{}.{}".\
-            format(video_file_path, chunk_size, parsed_video_size, pth, counter, ext)
-        # print("About to run: {}".format(cmd))
+        cmd = f"ffmpeg -i {video_file_path} -vcodec copy -strict -2 -fs {chunk_size} -ss \
+        {parsed_video_size} {raw_name}{counter}.{ext}"
         check_call(shlex.split(cmd), universal_newlines=True)
-        # print(file_name + str(counter) + " done")
         parsed_video_size = parsed_video_size + \
-            calculate_video_size(pth + str(counter) + '.' + ext)
+            calculate_video_size(raw_name + str(counter) + '.' + ext)
         counter = counter + 1
 
 
 def main():
+    default_size = 10000000
     video_file_path = sys.argv[1]
-    chunk_size = sys.argv[2]
+    chunk_size = sys.argv[2] if len(sys.argv) == 3 else default_size
     chop_video(video_file_path, chunk_size)
 
 
