@@ -10,7 +10,7 @@ This splits `file.mp4` into chunks of 30 Megabytes and each chunk will be suffix
 
 If no chunk size is given then by default, video will be splitted in to chunks of 10 Megabytes.
 
-Tip: Do set your video size less than the required size as it may go a bit above as FFMpeg splits video on the basis of frames.
+Tip: Do set your chunk size less than required as it may go a bit above as FFMpeg splits video on the basis of frames.
 
 ## Installing ffmpeg
 
